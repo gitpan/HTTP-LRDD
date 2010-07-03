@@ -46,6 +46,21 @@
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTTP-LRDD-0.100.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.100</revision>
   </Version>
+  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/HTTP-LRDD/v_0-101">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Bugfix>
+            <rdfs:label xml:lang="en">Possibly this will fix some cpan-tester fails, though I'm not entirely sure.</rdfs:label>
+          </dcs:Bugfix>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/HTTP-LRDD/v_0-100"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-07-03</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTTP-LRDD-0.101.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.101</revision>
+  </Version>
   <Project rdf:about="http://purl.org/NET/cpan-uri/dist/HTTP-LRDD/project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTTP-LRDD"/>
     <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-30</created>
@@ -59,6 +74,7 @@
     <programming-language>Perl</programming-language>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTTP-LRDD/v_0-01"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTTP-LRDD/v_0-100"/>
+    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTTP-LRDD/v_0-101"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTTP-LRDD/"/>

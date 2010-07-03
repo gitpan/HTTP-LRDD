@@ -41,6 +41,18 @@ my:v_0-100
 		dcs:item [ rdfs:label "Minor bugfixes and cleanups."@en ] 
 		] .
 
+my:v_0-101
+
+	a               :Version ;
+	dc:issued       "2010-07-03"^^xsd:date ;
+	:revision       "0.101"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTTP-LRDD-0.101.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-100 ;
+			dcs:item
+				[ rdfs:label "Possibly this will fix some cpan-tester fails, though I'm not entirely sure."@en ; a dcs:Bugfix ]
+		] .
+
 #############################################################
 
 my:project
@@ -59,7 +71,7 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-01-30"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0-01 , my:v_0-100 .
+	:release        my:v_0-01 , my:v_0-100 , my:v_0-101 .
 
 #############################################################
 

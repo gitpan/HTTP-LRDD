@@ -10,12 +10,16 @@ Home page:    <http://search.cpan.org/dist/HTTP-LRDD/>
 Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=HTTP-LRDD>
 Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
 
+0.101 [2010-07-03]
+ - (Bugfix) Possibly this will fix some cpan-tester fails, though I'm not
+   entirely sure.
+
 0.100 [2010-06-30]
  - (Addition) Add process and process_all methods which combine discover
    and parse stages.
+ - Minor bugfixes and cleanups.
  - (Addition) Add a parse method to actually do something with a descriptor
    URI once it's been found.
- - Minor bugfixes and cleanups.
 
 0.01 [2010-02-01] # First release
 

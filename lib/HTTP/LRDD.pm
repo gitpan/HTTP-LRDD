@@ -27,7 +27,7 @@ use HTML::HTML5::Parser;
 use HTML::HTML5::Sanity;
 use HTTP::Link::Parser qw(:all);
 use HTTP::Status qw(:constants);
-use RDF::RDFa::Parser '0.30';
+use RDF::RDFa::Parser;
 use RDF::TrineShortcuts;
 use Scalar::Util qw(blessed);
 use URI;
@@ -37,11 +37,11 @@ use XRD::Parser '0.100';
 
 =head1 VERSION
 
-0.100
+0.101
 
 =cut
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 my (@Predicates, @MediaTypes);
 
 BEGIN
