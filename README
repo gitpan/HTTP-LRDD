@@ -13,13 +13,13 @@ SYNOPSIS
      }
 
 VERSION
-    0.101
+    0.102
 
 DESCRIPTION
     Note: the LRDD specification has ceased to be, with some parts being
     merged into the host-meta Internet Draft. This CPAN module will go in
     its own direction, bundling up best-practice techniques for discovering
-    descriptors for a given URI.
+    links and descriptors for a given URI.
 
   Import Routine
     "use HTTP::LRDD (@predicates);"
@@ -69,8 +69,8 @@ DESCRIPTION
         *   http://HOSTNAME/.well-known/host-meta
 
         If none of the above is able to yield a link to a descriptor, then
-        the resource URI itself may be returned if it is in RDF or RDFa
-        format (i.e. potentially self-describing).
+        the resource URI itself may be returned if it is in a
+        self-describing format (e.g. RDF).
 
         There is no guaranteed file format for the descriptor, but it is
         usually RDF, POWDER XML or XRD.
@@ -100,11 +100,61 @@ DESCRIPTION
         Calls "discover" in a list context, so multiple descriptors are
         combined into the resulting graph.
 
+EXAMPLES
+    Discover the hub address (PubSubHubub) for a feed:
+
+     my $lrdd = HTTP::LRDD->new('hub');
+     my $hub  = $lrdd->discover('http://example.net/feed.atom');
+
+    Discover an author link (rel="author") from an HTML page:
+
+     my $lrdd   = HTTP::LRDD->new('author');
+     my $author = $lrdd->discover('http://example.com/page.html');
+
+    (For RDF people, you should note that rel="author" is not semantically
+    equivalent to the "foaf:maker" property but closer to the
+    "foaf:maker/foaf:homepage" SPARQL 1.1 property path - i.e. the
+    rel="author" link destination is not a URI for the author themselves,
+    but a page about the author.)
+
+    If that author resource is in a machine-readable format (e.g. RDF), then
+    parse the data:
+
+     my $author_data = $lrdd->parse($author);
+
+    Or, you can combine "discover" and "parse":
+
+     my $lrdd        = HTTP::LRDD->new('author');
+     my $author_data = $lrdd->process('http://example.com/page.html');
+
+    Get metadata for an image:
+
+     my $lrdd = HTTP::LRDD->new;
+     my $data = $lrdd->process_all('http://example.org/flower.jpeg');
+
+    As we're not passing any arguments to the constructor, we can use a
+    shortcut:
+
+     my $data = HTTP::LRDD->process_all('http://example.org/flower.jpeg');
+
+    Find the title of the image:
+
+     use RDF::TrineShortcuts qw':default :flatten';
+ 
+     my @results = flatten_iterator(rdf_query(
+      "SELECT ?t WHERE { <http://example.org/flower.jpeg> dc:title ?t }"));
+     if (@results) {
+       printf("The title is: %s\n", $results[0]->{'title'});
+     } else {
+       warn "Could not find title for image.";
+     }
+
 BUGS
     Please report any bugs to <http://rt.cpan.org/>.
 
 SEE ALSO
-    XRD::Parser, WWW::Finger, RDF::TrineShortcuts.
+    HTTP::Link::Parser, XRD::Parser, XML::Atom::OWL WWW::Finger,
+    RDF::TrineShortcuts.
 
     <http://www.perlrdf.org/>.
 

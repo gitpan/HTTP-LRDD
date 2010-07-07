@@ -31,11 +31,11 @@ requires:
   URI: 1.30
   URI::Escape: 0
   XML::Atom::OWL: 0
-  XRD::Parser: 0.100
+  XRD::Parser: 0.101
   perl: 5.8.0
 resources:
   bugtracker: http://rt.cpan.org/Dist/Display.html?Queue=HTTP-LRDD
   homepage: http://search.cpan.org/dist/HTTP-LRDD/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/HTTP-LRDD/
-version: 0.101
+version: 0.102
