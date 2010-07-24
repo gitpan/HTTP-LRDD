@@ -14,12 +14,12 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 7d7afbaf6234c995bd8dc7bedf6236bf610232bd Changes
-SHA1 f82485e9f34403c6b99def8bfae68e8bf0fff6de Changes.ttl
-SHA1 930948f47ad3a12dcbc5dcf8c3e98e4665d4f9d6 Changes.xml
+SHA1 27647e7aed2449e4fba2dc7b45189d4ffd97f279 Changes
+SHA1 a2a165c0e2f43d2e3e57ae4af2cdd12bb64fe92d Changes.ttl
+SHA1 50bdc1d409e7b95dc00679d30d38d5f133facbea Changes.xml
 SHA1 3cb28f73baea56facae62697716c64e2a88c5812 MANIFEST
 SHA1 28817ddce2c975015b983e0c5bfe5dfb9f44532a MANIFEST.SKIP
-SHA1 36043a3b553b535b2b01a05e78e055da90a00bde META.yml
+SHA1 2dcac6f9a3da84229bee6d73594d3113f579eb06 META.yml
 SHA1 c3e7e26291e60c3c1f0b8a9bce269a7c598ffa83 Makefile.PL
 SHA1 53fe6fb612c4362cf44bce6c09f0379a57997ecd README
 SHA1 8842ca38ce27ccf75e1ce8f5dfb93fa62d933b2e inc/Module/AutoInstall.pm
@@ -27,7 +27,7 @@ SHA1 1ebec4119486a032a5612a403e8d7b7be973e938 inc/Module/Install.pm
 SHA1 bec3c7f9af6e1a3cb4d143249956c98af30f0552 inc/Module/Install/AutoInstall.pm
 SHA1 24038af925a69df41972971356ccce885b0fe2ad inc/Module/Install/Base.pm
 SHA1 8f96eddfef548c9328457fbb17a121631cda356b inc/Module/Install/Can.pm
-SHA1 b19da2715a136aba51510f687a7b4e431e0a4bec inc/Module/Install/DOAPChangeSets.pm
+SHA1 de189984fc99741cc060d1964f513e45bf6d5c74 inc/Module/Install/DOAPChangeSets.pm
 SHA1 ec29048e48edd9c9c55f9de7b773bd7c904335ad inc/Module/Install/Fetch.pm
 SHA1 01862227830d2547f38275eaee0eb9f5add5a252 inc/Module/Install/Include.pm
 SHA1 0384525d85d51e99532e3ad8729d870113646d14 inc/Module/Install/Makefile.pm
@@ -36,13 +36,13 @@ SHA1 a615bb050ca0b2d79bfa0224addcb83019a53b09 inc/Module/Install/ReadmeFromPod.p
 SHA1 5c25f1104c0038041e3b93e0660c39171e4caf2b inc/Module/Install/Win32.pm
 SHA1 94d47349c803c4bd2a9230d25e4db0b6aaf1acd8 inc/Module/Install/WriteAll.pm
 SHA1 1e6399a0585817abef500c34fce676fb9b0545f0 inc/Test/Signature.pm
-SHA1 2fc6da28463a430c5479b6e38e1b57b2761f0468 lib/HTTP/LRDD.pm
+SHA1 30070d49dbf3938a67a30bd38353db17b3078f72 lib/HTTP/LRDD.pm
 SHA1 bb128dce2db8ad397dbeb957d79d084cc5d2391a t/00sig.t
 SHA1 516a54073fd6d9efc02c6efa1b6742b02af3f386 t/01basic.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkw0eqwACgkQzr+BKGoqfTnJgACdEdgsHdFBdheas9lTlq+Hv/Qp
-ZicAoJ1wlMgpVnRwSh8YhGlqe2ZnrltG
-=jH5C
+iEYEARECAAYFAkxLeuAACgkQzr+BKGoqfTmBAACeLHjH+QkIcnb/GuIHER2Vrtrx
+18YAnRPBfISojERVLtPhtBYNKuasFHKR
+=PudA
 -----END PGP SIGNATURE-----
