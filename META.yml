@@ -8,34 +8,37 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.95'
+generated_by: 'Module::Install version 1.02'
+keywords: []
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
+module_name: HTTP::LRDD
 name: HTTP-LRDD
 no_index:
   directory:
+    - examples
     - inc
     - t
+    - xt
 requires:
-  Carp: 1.00
-  Error: 0
-  HTML::HTML5::Parser: 0
-  HTML::HTML5::Sanity: 0
-  HTTP::Link::Parser: 0
+  HTML::HTML5::Parser: 0.107
+  HTML::HTML5::Sanity: 0.102
+  HTTP::Link::Parser: 0.102
   HTTP::Status: 0
-  RDF::RDFa::Parser: 0.30
-  RDF::TrineShortcuts: 0
+  RDF::RDFa::Parser: 1.096
+  RDF::TrineShortcuts: 0.104
   Scalar::Util: 0
-  URI: 1.30
+  UNIVERSAL::AUTHORITY: 0
+  URI: 0
   URI::Escape: 0
-  XML::Atom::OWL: 0
+  XML::Atom::OWL: 0.100
   XRD::Parser: 0.101
-  perl: 5.8.0
+  perl: 5.10.0
 resources:
   bugtracker: http://rt.cpan.org/Dist/Display.html?Queue=HTTP-LRDD
-  homepage: http://search.cpan.org/dist/HTTP-LRDD/
+  homepage: https://metacpan.org/release/HTTP-LRDD
   license: http://dev.perl.org/licenses/
-  repository: http://goddamn.co.uk/viewvc/perlmods/HTTP-LRDD/
-version: 0.103
+  repository: https://bitbucket.org/tobyink/p5-http-lrdd
+version: 0.104
