@@ -6,11 +6,16 @@ Home page:    <https://metacpan.org/release/HTTP-LRDD>
 Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=HTTP-LRDD>
 Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
 
+0.105  2011-12-04
+
+ - Replace UNIVERSAL::AUTHORITY with Object::AUTHORITY.
+ - (Bugfix Packaging) Newer version of Module::Package::RDF.
+
 0.104  2011-11-27
 
  - Minor tidy
- - (Update) use 5.010
  - (Packaging) Module::Package::RDF
+ - (Update) use 5.010
  - (Addition) Support wdrs:describedby predicate by default.
 
 0.103  2010-07-25

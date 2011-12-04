@@ -7,10 +7,10 @@ use HTML::HTML5::Parser 0.107;
 use HTML::HTML5::Sanity 0.102;
 use HTTP::Link::Parser 0.102 qw(:all);
 use HTTP::Status 0 qw(:constants);
+use Object::AUTHORITY 0;
 use RDF::RDFa::Parser 1.096;
 use RDF::TrineShortcuts 0.104;
 use Scalar::Util 0 qw(blessed);
-use UNIVERSAL::AUTHORITY 0;
 use URI 0;
 use URI::Escape 0;
 use XML::Atom::OWL 0.100;
@@ -21,7 +21,7 @@ my (@Predicates, @_Predicates, @MediaTypes);
 BEGIN
 {
 	$HTTP::LRDD::AUTHORITY = 'cpan:TOBYINK';
-	$HTTP::LRDD::VERSION   = '0.104';
+	$HTTP::LRDD::VERSION   = '0.105';
 	
 	@Predicates = (
 		'describedby',
