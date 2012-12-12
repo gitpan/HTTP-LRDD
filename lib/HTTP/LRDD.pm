@@ -8,8 +8,9 @@ use HTML::HTML5::Sanity 0.102;
 use HTTP::Link::Parser 0.102 qw(:all);
 use HTTP::Status 0 qw(:constants);
 use Object::AUTHORITY 0;
+use RDF::TrineX::Functions 0 -shortcuts;
 use RDF::RDFa::Parser 1.096;
-use RDF::TrineShortcuts 0.104;
+use RDF::Query 2.900;
 use Scalar::Util 0 qw(blessed);
 use URI 0;
 use URI::Escape 0;
@@ -21,7 +22,7 @@ my (@Predicates, @_Predicates, @MediaTypes);
 BEGIN
 {
 	$HTTP::LRDD::AUTHORITY = 'cpan:TOBYINK';
-	$HTTP::LRDD::VERSION   = '0.105';
+	$HTTP::LRDD::VERSION   = '0.106';
 	
 	@Predicates = (
 		'describedby',
@@ -29,7 +30,7 @@ BEGIN
 		'http://www.w3.org/2007/05/powder-s#describedby',
 		'http://www.w3.org/1999/xhtml/vocab#meta',
 		'http://www.w3.org/2000/01/rdf-schema#seeAlso',
-		);
+	);
 	@_Predicates = @Predicates;
 	@MediaTypes = (
 		'application/xrd+xml',
@@ -39,7 +40,24 @@ BEGIN
 		'application/xhtml+xml;q=0.9',
 		'text/html;q=0.9',
 		'*/*;q=0.1',
-		);
+	);
+}
+
+sub __rdf_query
+{
+	my ($sparql, $model) = @_;
+	my $result = RDF::Query->new($sparql)->execute($model);
+	
+	if ($result->is_boolean)
+		{ return $result->get_boolean }
+	elsif ($result->is_bindings)
+		{ return $result }
+	
+	$result->is_graph or die;
+	
+	my $return = RDF::Trine::Model->new;
+	$return->add_hashref( $result->as_hashref );
+	return $return;
 }
 
 sub import
@@ -78,9 +96,9 @@ sub discover
 	
 	$self = $self->new
 		unless blessed($self) && $self->isa(__PACKAGE__);
-
+	
 	my (@results, $rdfa, $rdfx, $response);
-
+	
 	# STEP 1: check the HTTP headers for a descriptor link
 	if ($uri =~ /^https?:/i)
 	{
@@ -88,7 +106,7 @@ sub discover
 		my $model    = rdf_parse();
 		
 		# Parse HTTP 'Link' headers.
-		parse_links_into_model($response, $model);
+		parse_links_into_model($response => $model);
 		
 		if ($response->code eq HTTP_SEE_OTHER) # 303 Redirect
 		{
@@ -99,13 +117,13 @@ sub discover
 			$model->add_hashref({
 				$uri => {
 					'http://www.w3.org/2000/01/rdf-schema#seeAlso' => [
-							{ 'value' => "$seeother" , 'type' => 'uri' },
-						],
-					},
-				});
+						{ 'value' => "$seeother" , 'type' => 'uri' },
+					],
+				},
+			});
 		}
-
-		my $iterator = rdf_query($self->_make_sparql($uri, $list), $model);
+		
+		my $iterator = __rdf_query($self->_make_sparql($uri, $list), $model);
 		while (my $row = $iterator->next)
 		{
 			push @results, $row->{'descriptor'}->uri
@@ -116,7 +134,7 @@ sub discover
 		# Bypass further processing if we've got a result and we only wanted one!
 		return $results[0] if @results && !$list;
 	}
-
+	
 	# STEP 2: check the HTTP body (RDF) for a descriptor link
 	if ($uri =~ /^https?:/i)
 	{
@@ -128,8 +146,8 @@ sub discover
 		# If the response was not RDFa, try parsing as RDF.
 		($response, $rdfx) = $self->_cond_parse_rdf($response, $model, $uri)
 			unless defined $rdfa;
-
-		my $iterator = rdf_query($self->_make_sparql($uri, $list), $model);
+		
+		my $iterator = __rdf_query($self->_make_sparql($uri, $list), $model);
 		while (my $row = $iterator->next)
 		{
 			push @results, $row->{'descriptor'}->uri
@@ -138,13 +156,13 @@ sub discover
 		}
 		
 		# Bypass further processing if we've got a result and we only wanted one!
-		return $results[0] if @results && !$list;		
+		return $results[0] if @results && !$list;
 	}
-
+	
 	# STEP 2a: AtomOWL doesn't use <id> as a subject URI.
 	if (defined $rdfa && $rdfa->{'atom_parser'} && blessed($self->{'cache'}->{$uri}))
 	{
-		my $iterator = rdf_query($self->_make_sparql_atomowl($uri, $list), $self->{'cache'}->{$uri});
+		my $iterator = __rdf_query($self->_make_sparql_atomowl($uri, $list), $self->{'cache'}->{$uri});
 		while (my $row = $iterator->next)
 		{
 			push @results, $row->{'descriptor'}->uri
@@ -172,7 +190,7 @@ sub discover
 		my $hm_graph = $self->{'cache'}->{$hostmeta_location};
 		
 		# First try original query.
-		my $iterator = rdf_query($self->_make_sparql($uri, $list), $hm_graph);
+		my $iterator = __rdf_query($self->_make_sparql($uri, $list), $hm_graph);
 		while (my $row = $iterator->next)
 		{
 			push @results, $row->{'descriptor'}->uri
@@ -181,7 +199,7 @@ sub discover
 		}
 		
 		# Then try using host-meta URI templates.
-		$iterator = rdf_query($self->_make_sparql_template($uri, $list), $hm_graph);
+		$iterator = __rdf_query($self->_make_sparql_template($uri, $list), $hm_graph);
 		while (my $row = $iterator->next)
 		{
 			if (defined $row->{'descriptor'}
@@ -212,15 +230,15 @@ sub discover
 	{
 		return $list ? @results : $results[0];
 	}
-
-	return undef;
+	
+	return;
 }
 
 sub parse
 {
 	my $self = shift;
 	my $uri  = shift or return undef;
-
+	
 	$self = $self->new
 		unless blessed($self) && $self->isa(__PACKAGE__);
 	
@@ -249,7 +267,7 @@ sub process
 {
 	my $self = shift;
 	my $uri  = shift;
-
+	
 	$self = $self->new
 		unless blessed($self) && $self->isa(__PACKAGE__);
 		
@@ -261,10 +279,10 @@ sub process_all
 {
 	my $self = shift;
 	my $uri  = shift;
-
+	
 	$self = $self->new
 		unless blessed($self) && $self->isa(__PACKAGE__);
-		
+	
 	my @descriptors = $self->discover($uri);
 	my $model       = $self->parse($uri) // rdf_parse();
 	
@@ -280,7 +298,7 @@ sub process_all
 sub _make_sparql
 {
 	my ($self, $uri, $list) = @_;
-
+	
 	my @p;
 	foreach my $p (@{ $self->{'predicates'} })
 	{
@@ -295,7 +313,7 @@ sub _make_sparql
 sub _make_sparql_atomowl
 {
 	my ($self, $uri, $list) = @_;
-
+	
 	my @p;
 	foreach my $p (@{ $self->{'predicates'} })
 	{
@@ -344,11 +362,11 @@ sub _cond_parse_rdfa
 	{
 		return ($response, undef);
 	}
-
+	
 	$response->is_success or return ($response, undef);
-
+	
 	my $hostlang = RDF::RDFa::Parser::Config->host_from_media_type($response->content_type);
-	$rdfa_options = RDF::RDFa::Parser::Config->new($hostlang, RDF::RDFa::Parser::Config->RDFA_GUESS, 
+	$rdfa_options = RDF::RDFa::Parser::Config->new($hostlang, RDF::RDFa::Parser::Config->RDFA_GUESS,
 		atom_parser => ($response->content_type =~ m'^application/atom\+xml'i ? 1 : 0),
 		);
 	
@@ -403,9 +421,9 @@ sub _cond_parse_rdf
 	{
 		return ($response, undef);
 	}
-
+	
 	$response->is_success or return ($response, undef);
-
+	
 	rdf_parse($response->decoded_content, type=>$type, model=>$model, base=>$response->base);
 	$self->{'cache'}->{$uri} = $model;
 	return ($response, 1);
@@ -429,7 +447,7 @@ sub _cond_parse_xrd
 	{
 		return ($response, undef);
 	}
-
+	
 	$response->is_success or return ($response, undef);
 	
 	my $xrd = XRD::Parser->new($response->decoded_content, $response->base, {loose_mime=>1}, $model->_store);
@@ -487,10 +505,13 @@ given URI.
 When importing HTTP::LRDD, you can optionally provide a list of
 predicate URIs (i.e. the URIs which rel values expand to). This
 may also include IANA-registered link types, which are short tokens
-rather than full URIs.
+rather than full URIs. If you do not provide a list of predicate
+URIs, then a sensible default set is used.
 
-If you do not provide a list of predicate URIs, then a sensible
-default set is used.
+Because this configuration is global in nature, it is not recommended.
+It is better to supply a list of predicates to the constructor
+instead, or rely on the defaults. This feature should be regarded
+as deprecated.
 
 =back
 
@@ -623,15 +644,12 @@ As we're not passing any arguments to the constructor, we can use a shortcut:
  
 Find the title of the image:
 
- use RDF::TrineShortcuts qw/:default :flatten/;
+ use RDF::QueryX::Lazy;
  
- my @results = flatten_iterator(rdf_query(
-  "SELECT ?t WHERE { <http://example.org/flower.jpeg> dc:title ?t }"));
- if (@results) {
-   printf("The title is: %s\n", $results[0]->{'title'});
- } else {
-   warn "Could not find title for image.";
- }
+ my $image   = q<http://example.org/flower.jpeg>;
+ my $results = RDF::QueryX::Lazy
+   -> new("SELECT * WHERE { <$image> dc:title ?t }")
+   -> execute( HTTP::LRDD->process_all($image) );
 
 =head1 BUGS
 
@@ -648,7 +666,7 @@ If you're running a server, use the correct media type.
 =head1 SEE ALSO
 
 L<HTTP::Link::Parser>, L<XRD::Parser>, L<XML::Atom::OWL>
-L<WWW::Finger>, L<RDF::TrineShortcuts>.
+L<WWW::Finger>.
 
 L<http://www.perlrdf.org/>.
 
@@ -658,7 +676,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright 2010-2011 Toby Inkster
+Copyright 2010-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

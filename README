@@ -23,10 +23,13 @@ DESCRIPTION
         When importing HTTP::LRDD, you can optionally provide a list of
         predicate URIs (i.e. the URIs which rel values expand to). This may
         also include IANA-registered link types, which are short tokens
-        rather than full URIs.
+        rather than full URIs. If you do not provide a list of predicate
+        URIs, then a sensible default set is used.
 
-        If you do not provide a list of predicate URIs, then a sensible
-        default set is used.
+        Because this configuration is global in nature, it is not
+        recommended. It is better to supply a list of predicates to the
+        constructor instead, or rely on the defaults. This feature should be
+        regarded as deprecated.
 
   Constructors
     "HTTP::LRDD->new(@predicates)"
@@ -137,15 +140,12 @@ EXAMPLES
 
     Find the title of the image:
 
-     use RDF::TrineShortcuts qw/:default :flatten/;
+     use RDF::QueryX::Lazy;
  
-     my @results = flatten_iterator(rdf_query(
-      "SELECT ?t WHERE { <http://example.org/flower.jpeg> dc:title ?t }"));
-     if (@results) {
-       printf("The title is: %s\n", $results[0]->{'title'});
-     } else {
-       warn "Could not find title for image.";
-     }
+     my $image   = q<http://example.org/flower.jpeg>;
+     my $results = RDF::QueryX::Lazy
+       -> new("SELECT * WHERE { <$image> dc:title ?t }")
+       -> execute( HTTP::LRDD->process_all($image) );
 
 BUGS
     Please report any bugs to <http://rt.cpan.org/>.
@@ -159,8 +159,7 @@ BUGS
     server, use the correct media type.
 
 SEE ALSO
-    HTTP::Link::Parser, XRD::Parser, XML::Atom::OWL WWW::Finger,
-    RDF::TrineShortcuts.
+    HTTP::Link::Parser, XRD::Parser, XML::Atom::OWL WWW::Finger.
 
     <http://www.perlrdf.org/>.
 
@@ -168,7 +167,7 @@ AUTHOR
     Toby Inkster <tobyink@cpan.org>.
 
 COPYRIGHT AND LICENCE
-    Copyright 2010-2011 Toby Inkster
+    Copyright 2010-2012 Toby Inkster
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
